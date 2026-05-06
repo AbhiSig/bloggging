@@ -9,7 +9,6 @@ async def admin_notifications(
     websocket: WebSocket,
     token: str = Query(...)
 ):
-    # Validate token before accepting
     from jose import jwt, JWTError
     import os
 
@@ -27,18 +26,17 @@ async def admin_notifications(
         return
 
     await manager.connect(websocket)
-    print(f"✅ Admin WebSocket connected. Active connections: {len(manager.active_connections)}")
+    print(f"✅ Admin WebSocket connected. Active connections: {len(manager.admin_connections)}")
 
     try:
         while True:
-            # Keep connection alive — handle ping from client
             data = await websocket.receive_text()
             if data == "ping":
-                await websocket.send_text("pong")  # ✅ respond to ping
+                await websocket.send_text("pong")
 
     except WebSocketDisconnect:
         manager.disconnect(websocket)
-        print(f"Admin WebSocket disconnected. Active connections: {len(manager.active_connections)}")
+        print(f"Admin WebSocket disconnected. Active connections: {len(manager.admin_connections)}")
 
     except Exception as e:
         print(f"WebSocket error: {e}")

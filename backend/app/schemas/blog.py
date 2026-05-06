@@ -7,7 +7,7 @@ class BlogAuthor(BaseModel):
     username: str
 
     class Config:
-        from_attributes = True
+        from_attributes = True 
 
 
 class BlogCreate(BaseModel):

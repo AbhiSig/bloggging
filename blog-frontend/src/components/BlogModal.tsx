@@ -14,9 +14,10 @@ interface Comment {
   id: string;
   content: string;
   created_at: string;
-  user: {
+  is_ai: boolean;           // ← new
+  user?: {
     username: string;
-  };
+  } | null;                 // ← nullable (AI comments have no user)
 }
 
 interface BlogModalProps {
@@ -55,7 +56,7 @@ export default function BlogModal({ blog, onClose }: BlogModalProps) {
   return (
     <div
       className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center z-50 p-0 sm:p-4"
-      onClick={(e) => { if (e.target === e.currentTarget) onClose() }}
+      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
       <div className="bg-white w-full sm:w-[90%] md:w-[700px] max-h-[92vh] sm:max-h-[90vh] overflow-y-auto sm:rounded-2xl rounded-t-2xl shadow-2xl flex flex-col">
 
@@ -126,29 +127,62 @@ export default function BlogModal({ blog, onClose }: BlogModalProps) {
               </div>
             ) : (
               <div className="space-y-1">
-                {comments.map((c) => (
-                  <div key={c.id} className="py-3 border-b border-gray-50 last:border-0">
-                    <div className="flex items-center justify-between mb-1">
-                      <div className="flex items-center gap-2">
-                        {/* Avatar */}
-                        <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-gray-800 text-white text-xs flex items-center justify-center font-semibold flex-shrink-0">
-                          {c.user?.username?.[0]?.toUpperCase() || "?"}
+                {comments.map((c) => {
+                  const isAI      = c.is_ai;
+                  const name      = isAI ? "BlogBot AI" : (c.user?.username ?? "User");
+                  const initials  = isAI ? "🤖" : name[0]?.toUpperCase();
+
+                  return (
+                    <div
+                      key={c.id}
+                      className={`py-3 px-3 rounded-xl border mb-2 last:mb-0 transition-all ${
+                        isAI
+                          ? "bg-gradient-to-r from-violet-50 to-indigo-50 border-violet-200"
+                          : "border-gray-50 border-b last:border-0 bg-transparent rounded-none"
+                      }`}
+                    >
+                      <div className="flex items-center justify-between mb-1">
+                        <div className="flex items-center gap-2">
+                          {/* Avatar */}
+                          <div
+                            className={`w-6 h-6 sm:w-7 sm:h-7 rounded-full text-xs flex items-center justify-center font-semibold flex-shrink-0 ${
+                              isAI
+                                ? "bg-gradient-to-br from-violet-500 to-indigo-500 text-white"
+                                : "bg-gray-800 text-white"
+                            }`}
+                          >
+                            {initials}
+                          </div>
+
+                          {/* Name */}
+                          <p className="font-semibold text-xs sm:text-sm text-gray-800">
+                            {name}
+                          </p>
+
+                          {/* AI Badge */}
+                          {isAI && (
+                            <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-violet-100 text-violet-700 border border-violet-200">
+                              <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
+                              </svg>
+                              AI Suggestion
+                            </span>
+                          )}
                         </div>
-                        <p className="font-semibold text-xs sm:text-sm text-gray-800">
-                          {c.user?.username}
-                        </p>
+
+                        <span className="text-xs text-gray-400">
+                          {new Date(c.created_at).toLocaleDateString("en-US", {
+                            month: "short", day: "numeric",
+                          })}
+                        </span>
                       </div>
-                      <span className="text-xs text-gray-400">
-                        {new Date(c.created_at).toLocaleDateString("en-US", {
-                          month: "short", day: "numeric"
-                        })}
-                      </span>
+
+                      <p className="text-sm text-gray-600 leading-relaxed pl-8 sm:pl-9">
+                        {c.content}
+                      </p>
                     </div>
-                    <p className="text-sm text-gray-600 leading-relaxed pl-8 sm:pl-9">
-                      {c.content}
-                    </p>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </div>
