@@ -192,8 +192,8 @@ git push origin feature-name
 
 **Devisha Agrawal**
 
-* GitHub: https://github.com/DevAgr4
-* CSE Student interested in **Data Analytics**, **Cyber Security**, and **AI-based Applications**
+* GitHub: https://github.com/AbhiSig
+* CSE Student interested in **Data Analytics**, **Data Engineer**, and **AI Engineer**
 
 ---
 
