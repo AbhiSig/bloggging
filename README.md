@@ -51,7 +51,7 @@ blog-analysis/
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/DevAgr4/blog-analysis.git
+git clone https://github.com/AbhiSig/blog-analysis.git
 cd blog-analysis
 ```
 
