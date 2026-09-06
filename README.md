@@ -190,7 +190,7 @@ git push origin feature-name
 
 ## Author
 
-**Devisha Agrawal**
+**Abhishek Singh Rajput**
 
 * GitHub: https://github.com/AbhiSig
 * CSE Student interested in **Data Analytics**, **Data Engineer**, and **AI Engineer**
@@ -202,7 +202,7 @@ git push origin feature-name
 This project is licensed under the **MIT License**.
 
 ```text
-MIT License © 2026 Devisha Agrawal
+MIT License © 2026 Abhishek Singh Rajput
 ```
 
 ---
